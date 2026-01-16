@@ -6,6 +6,20 @@ void cpu_vecAdd(float* A_h, float* B_h, float* C_h, int n){
   }
 }
 
+
+// Kernel function, where all the threads are uniquely identfied by i. 
+// Dont need to have a for loop, as the elements are all computed parallely.
+__global__
+void vecAddKernel(float* A, float* B, float* C, int n){
+  int i = blockIdx.x*blockDim.x + threadIdx.x;
+
+  if(i<n){
+    C[i] = A[i] + B[i];
+  }
+}
+
+
+
 void gpu_vecAdd(float* A_h, float* B_h, float* C_h, int n){
   // Part 1: Initialize the device variables
   int size = n*sizeof(float);
